@@ -1,0 +1,28 @@
+service:
+  drop:
+    build:
+      context: .
+    container_name: drop
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - ${DROP_PORT}:3000
+    volumes:
+      - ${LIBRARY_PATH}:/library
+      - /mnt/nvme/appdata/drop/data:/data
+    environment:
+      - DATABASE_URL=postgres://${DROP_DB_USER}:${DROP_DB_PASSWORD}@db:${POSTGRES_PORT}/${DROP_DB_NAME}
+      - EXTERNAL_URL=${DROP_EXTERNAL_URL}
+      - IGDB_CLIENT_ID=${IGDB_CLIENT_ID}
+      - IGDB_CLIENT_SECRET=${IGDB_CLIENT_SECRET}
+      - OIDC_CLIENT_ID=${OIDC_CLIENT_ID}
+      - OIDC_CLIENT_SECRET=${OIDC_CLIENT_SECRET}
+      - OIDC_ADMIN_GROUP=${OIDC_ADMIN_GROUP}
+      - OIDC_USER_GROUP=${OIDC_USER_GROUP}
+      - DISABLE_SIMPLE_AUTH=${DISABLE_SIMPLE_AUTH}
+      - OIDC_USERNAME_CLAIM=${OIDC_USERNAME_CLAIM}
+      - OIDC_PROVIDER_NAME=${OIDC_PROVIDER_NAME}
+      - OIDC_DONT_REQUIRE_HTTPS=${OIDC_DONT_REQUIRE_HTTPS}
+      - OIDC_WELLKNOWN=${OIDC_WELLKNOWN}
